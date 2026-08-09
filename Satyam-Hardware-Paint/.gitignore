@@ -1,0 +1,41 @@
+# ──────────────────────────────
+# Root .gitignore
+# Satyam Hardware & Paint
+# ──────────────────────────────
+
+# Node
+node_modules/
+.npm
+npm-debug.log*
+
+# Vite / Build outputs
+dist/
+.vite/
+*.local
+
+# Environment files
+.env
+.env.*
+!.env.example
+
+# Java / Maven
+target/
+*.class
+*.jar
+*.war
+.mvn/
+*.iml
+
+# IDE
+.idea/
+.vscode/settings.json
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/

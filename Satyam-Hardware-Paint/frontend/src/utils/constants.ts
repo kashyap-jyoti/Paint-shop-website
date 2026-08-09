@@ -1,0 +1,238 @@
+// Business Information
+export const BUSINESS_INFO = {
+  name: 'Satyam Hardware & Paint Store',
+  tagline: 'Premium Paints & Hardware Supplies',
+  phone: '9236514590',
+  phoneDisplay: '+91 92365 14590',
+  whatsapp: '919236514590',
+  gstin: '09ENVPK6868Q1ZE',
+  stateCode: '09-Uttar Pradesh',
+  address: {
+    line1: 'Rauza',
+    line2: 'Near Pooja Pali Clinic, Roohi Mandi',
+    city: 'Ghazipur',
+    state: 'Uttar Pradesh',
+    stateCode: '09-Uttar Pradesh',
+    pincode: '233002',
+    full: '00 00 00 RAUZA, Near Pooja Pali Clinic, Roohi Mandi, Ghazipur, Uttar Pradesh 233002',
+  },
+  mapEmbedUrl:
+    'https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3607.6!2d83.5766!3d25.5788!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMjXCsDM0JzQ0LjAiTiA4M8KwMzQnMzUuOCJF!5e0!3m2!1sen!2sin!4v1690000000000',
+  hours: [
+    { day: 'Monday – Saturday', time: '8:00 AM – 8:00 PM' },
+    { day: 'Sunday', time: '9:00 AM – 6:00 PM' },
+  ],
+  experience: 10,
+  customersServed: 1000,
+  productsCount: 500,
+  email: 'satyamhardwarepaint@gmail.com',
+};
+
+// Products Data
+export const PRODUCTS = [
+  {
+    id: 1,
+    name: 'Birla Opus Style & One Interior Emulsion',
+    category: 'Interior',
+    image: 'birla-opus-interior.svg',
+    description: 'Ultra-luxurious smooth finish for interior walls with 100,000+ scrub cycles durability and stain resistance.',
+    features: ['Ultra Washable', 'Zero VOC', '3000+ Shades', '7 Year Warranty'],
+    priceRange: '₹280 – ₹850/L',
+    icon: '🏠',
+    gradient: 'from-purple-500 to-indigo-600',
+  },
+  {
+    id: 2,
+    name: 'Birla Opus AllDry Exterior Protect',
+    category: 'Exterior',
+    image: 'birla-opus-exterior.svg',
+    description: 'Advanced weather shield coating with elastomeric rain protection and sun heat resistance.',
+    features: ['Weatherproof', 'Anti-Algae', 'UV Resistant', '10 Year Warranty'],
+    priceRange: '₹340 – ₹950/L',
+    icon: '🌧️',
+    gradient: 'from-blue-500 to-cyan-600',
+  },
+  {
+    id: 3,
+    name: 'Birla Opus Prime Wall Putty',
+    category: 'Putty',
+    image: 'birla-opus-putty.svg',
+    description: 'Super white cement putty for velvet smooth wall surface preparation before painting.',
+    features: ['Super White Finish', 'Strong Adhesion', 'Crack Resistant', 'Easy Glaze'],
+    priceRange: '₹18 – ₹28/kg',
+    icon: '🧱',
+    gradient: 'from-amber-400 to-orange-500',
+  },
+  {
+    id: 4,
+    name: 'Premium Interior Emulsion',
+    category: 'Interior',
+    image: 'interior-paint.png',
+    description: 'Smooth, washable finish for interior walls. Excellent coverage with vibrant colors.',
+    features: ['Washable', 'Low VOC', '3000+ Shades', '5 Year Warranty'],
+    priceRange: '₹250 – ₹800/L',
+    icon: '🏠',
+    gradient: 'from-orange-400 to-red-500',
+  },
+  {
+    id: 5,
+    name: 'Exterior Weather Shield',
+    category: 'Exterior',
+    image: 'exterior-paint.png',
+    description: 'Advanced protection against rain, UV, and extreme weather conditions.',
+    features: ['Weatherproof', 'UV Resistant', 'Anti-fungal', '7 Year Warranty'],
+    priceRange: '₹300 – ₹900/L',
+    icon: '🌧️',
+    gradient: 'from-blue-400 to-indigo-600',
+  },
+  {
+    id: 6,
+    name: 'Premium Primer',
+    category: 'Primer',
+    image: 'primer.png',
+    description: 'Superior adhesion primer for better paint coverage and durability.',
+    features: ['Better Adhesion', 'Stain Block', 'Quick Dry', 'All Surfaces'],
+    priceRange: '₹180 – ₹450/L',
+    icon: '🪣',
+    gradient: 'from-yellow-400 to-orange-500',
+  },
+  {
+    id: 7,
+    name: 'Waterproof Coating',
+    category: 'Waterproof',
+    image: 'waterproof.png',
+    description: 'Elastomeric waterproof coating for roofs, terraces, and wet areas.',
+    features: ['100% Waterproof', 'Crack Bridge', 'Heat Resistant', 'Long Lasting'],
+    priceRange: '₹350 – ₹1200/L',
+    icon: '💧',
+    gradient: 'from-cyan-400 to-blue-600',
+  },
+  {
+    id: 8,
+    name: 'Professional Painting Tools & Brushes',
+    category: 'Tools',
+    image: 'images.png',
+    description: 'Heavy-duty wall painting brushes & tools with ergonomic handles and high-density bristles for smooth coverage.',
+    features: ['Natural Bristles', 'Wide Wall Brushes', 'Ergonomic Handle', 'All Wall Paint Types'],
+    priceRange: '₹30 – ₹650/set',
+    icon: '🖌️',
+    gradient: 'from-purple-400 to-pink-500',
+  },
+  {
+    id: 9,
+    name: 'Construction Hardware',
+    category: 'Hardware',
+    image: 'hardware-tools.png',
+    description: 'Screws, bolts, hinges, nails, and complete construction hardware supplies.',
+    features: ['Stainless Steel', 'Rust Resistant', 'All Sizes', 'Bulk Available'],
+    priceRange: '₹10 – ₹5000/set',
+    icon: '🔧',
+    gradient: 'from-slate-500 to-zinc-700',
+  },
+];
+
+// Brand Data
+export const BRANDS = [
+  { name: 'Birla Opus Paints', logo: 'birla-opus.svg', slug: 'birla-opus', color: '#6441a5' },
+  { name: 'Asian Paints', logo: 'asian-paints.png', slug: 'asian-paints', color: '#e31e24' },
+  { name: 'Berger Paints', logo: 'berger.png', slug: 'berger', color: '#003087' },
+  { name: 'Nerolac', logo: 'nerolac.png', slug: 'nerolac', color: '#004b8d' },
+  { name: 'Indigo Paints', logo: 'indigo.png', slug: 'indigo', color: '#1a237e' },
+  { name: 'JK Putty', logo: 'asian-paints.png', slug: 'jk-putty', color: '#d4a017' },
+  { name: 'Dr. Fixit', logo: 'berger.png', slug: 'dr-fixit', color: '#c41e3a' },
+  { name: 'Fevicol', logo: 'nerolac.png', slug: 'fevicol', color: '#ff6b00' },
+];
+
+// Services Data
+export const SERVICES = [
+  {
+    id: 1,
+    title: 'Color Consultation',
+    description: 'Expert advice on color combinations, finishes, and the right paint for your space.',
+    icon: '🎨',
+    gradient: 'from-orange-400 to-red-500',
+  },
+  {
+    id: 2,
+    title: 'Home Delivery',
+    description: 'Fast and safe delivery of paints and hardware to your doorstep in Ghazipur.',
+    icon: '🚚',
+    gradient: 'from-blue-400 to-indigo-600',
+  },
+  {
+    id: 3,
+    title: 'Painting Estimates',
+    description: 'Free accurate estimation of paint quantity and cost for your project.',
+    icon: '📐',
+    gradient: 'from-green-400 to-teal-600',
+  },
+  {
+    id: 4,
+    title: 'Bulk Orders',
+    description: 'Special pricing for contractors, builders, and large construction projects.',
+    icon: '📦',
+    gradient: 'from-purple-400 to-pink-500',
+  },
+  {
+    id: 5,
+    title: 'Tinting Service',
+    description: 'On-site computer tinting for any shade in thousands of colors available.',
+    icon: '💡',
+    gradient: 'from-yellow-400 to-orange-500',
+  },
+  {
+    id: 6,
+    title: 'After-Sale Support',
+    description: 'Dedicated support for application tips, troubleshooting, and product guidance.',
+    icon: '🤝',
+    gradient: 'from-cyan-400 to-blue-500',
+  },
+];
+
+// Testimonials
+export const TESTIMONIALS = [
+  {
+    id: 1,
+    name: 'Rajesh Kumar',
+    role: 'Contractor',
+    content: 'Best paint shop in Ghazipur! Always have the right products and the staff is very knowledgeable. My go-to place for all construction projects.',
+    rating: 5,
+    avatar: 'R',
+  },
+  {
+    id: 2,
+    name: 'Priya Sharma',
+    role: 'Homeowner',
+    content: 'Got excellent color consultation for my new home. The team helped me choose perfect shades for every room. Highly recommend!',
+    rating: 5,
+    avatar: 'P',
+  },
+  {
+    id: 3,
+    name: 'Mohan Singh',
+    role: 'Interior Designer',
+    content: 'Reliable supplier with genuine products and competitive prices. The bulk order service is excellent for big projects.',
+    rating: 5,
+    avatar: 'M',
+  },
+  {
+    id: 4,
+    name: 'Anita Verma',
+    role: 'Architect',
+    content: 'Satyam Hardware is my trusted partner. They stock everything from premium paints to quality tools. Outstanding service!',
+    rating: 5,
+    avatar: 'A',
+  },
+  {
+    id: 5,
+    name: 'Suresh Yadav',
+    role: 'Builder',
+    content: 'Great variety of products and fair pricing. The delivery service is quick and packaging is always intact. Very professional.',
+    rating: 5,
+    avatar: 'S',
+  },
+];
+
+// Paint Frame Animation
+export const PAINT_FRAMES_COUNT = 60; // frame_00 to frame_59
+export const PAINT_FRAME_DELAY_MS = 17; // average delay from GIF metadata
