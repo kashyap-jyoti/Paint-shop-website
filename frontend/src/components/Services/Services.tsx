@@ -89,7 +89,7 @@ export default function Services() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 270px), 1fr))',
             gap: '1.5rem',
           }}
         >
@@ -111,7 +111,7 @@ export default function Services() {
                   WebkitBackdropFilter: 'blur(20px)',
                   border: '1px solid rgba(255,255,255,0.07)',
                   borderRadius: '1.25rem',
-                  padding: '2rem',
+                  padding: 'clamp(1.25rem, 4vw, 2rem)',
                   display: 'flex',
                   flexDirection: 'column',
                   gap: '1rem',
