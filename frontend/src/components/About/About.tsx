@@ -156,14 +156,14 @@ export default function About() {
                 key={row.title}
                 style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))',
-                  gap: '2.5rem',
+                  gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
+                  gap: 'clamp(1.5rem, 3vw, 2.5rem)',
                   alignItems: 'center',
                   background: 'rgba(255,255,255,0.03)',
                   backdropFilter: 'blur(20px)',
                   border: '1px solid rgba(255,255,255,0.08)',
                   borderRadius: '1.5rem',
-                  padding: '2.5rem',
+                  padding: 'clamp(1.25rem, 4vw, 2.5rem)',
                   position: 'relative',
                   overflow: 'hidden',
                 }}
@@ -193,7 +193,7 @@ export default function About() {
                   <h3
                     style={{
                       fontFamily: 'Outfit, sans-serif',
-                      fontSize: '1.6rem',
+                      fontSize: 'clamp(1.25rem, 4vw, 1.6rem)',
                       fontWeight: 700,
                       color: 'white',
                       marginBottom: '1rem',
@@ -204,7 +204,7 @@ export default function About() {
                   <p
                     style={{
                       color: 'rgba(255,255,255,0.7)',
-                      fontSize: '1rem',
+                      fontSize: 'clamp(0.875rem, 2.5vw, 1rem)',
                       lineHeight: 1.8,
                       fontFamily: 'Inter, sans-serif',
                     }}
@@ -221,7 +221,7 @@ export default function About() {
                   transition={{ duration: 0.6 }}
                   style={{
                     order: isEven ? 2 : 1,
-                    height: '240px',
+                    height: 'clamp(180px, 30vw, 240px)',
                     borderRadius: '1.25rem',
                     overflow: 'hidden',
                     background: 'rgba(255,255,255,0.04)',
@@ -251,7 +251,7 @@ export default function About() {
         </div>
 
         {/* Stats Row */}
-        <div ref={statsRef} style={{ display: 'flex', gap: '1.5rem', flexWrap: 'wrap' }}>
+        <div ref={statsRef} style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(130px, 1fr))', gap: '1rem' }}>
           <StatCard value={10} label="Years of Experience" icon="🏆" suffix="+" delay={0} isActive={statsInView} />
           <StatCard value={1000} label="Happy Customers" icon="👥" suffix="+" delay={0.1} isActive={statsInView} />
           <StatCard value={500} label="Products Available" icon="🛒" suffix="+" delay={0.2} isActive={statsInView} />

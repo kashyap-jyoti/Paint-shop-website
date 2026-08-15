@@ -92,7 +92,7 @@ function ProductCard({ product, index }: ProductCardProps) {
       {/* Content */}
       <div
         style={{
-          padding: '2rem 1.5rem 1.25rem',
+          padding: 'clamp(1.25rem, 4vw, 2rem) clamp(1rem, 3vw, 1.5rem) 1.25rem',
           textAlign: 'center',
           position: 'relative',
           zIndex: 3,
@@ -311,7 +311,7 @@ export default function Products() {
           layout
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fill, minmax(280px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fill, minmax(min(100%, 260px), 1fr))',
             gap: '1.5rem',
           }}
         >

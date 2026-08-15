@@ -81,12 +81,12 @@ export default function Navbar() {
           style={{
             maxWidth: '1280px',
             margin: '0 auto',
-            padding: '0 1.25rem',
+            padding: '0 clamp(0.75rem, 3vw, 1.25rem)',
             height: '100%',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'space-between',
-            gap: '1rem',
+            gap: '0.75rem',
           }}
         >
           {/* ── Logo ── */}

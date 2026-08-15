@@ -72,7 +72,14 @@ export default function Hero() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 0.5, delay: 0.1 }}
             className="section-tag"
-            style={{ marginBottom: '1.5rem', background: 'rgba(249,115,22,0.18)', borderColor: 'rgba(249,115,22,0.4)' }}
+            style={{
+              marginBottom: '1.5rem',
+              background: 'rgba(249,115,22,0.18)',
+              borderColor: 'rgba(249,115,22,0.4)',
+              fontSize: 'clamp(0.7rem, 2.5vw, 0.8rem)',
+              maxWidth: '100%',
+              whiteSpace: 'normal',
+            }}
           >
             <span>⭐</span>
             <span>Trusted Store Since 10+ Years · Ghazipur, UP</span>
@@ -85,12 +92,13 @@ export default function Hero() {
             transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
             style={{
               fontFamily: 'Outfit, sans-serif',
-              fontSize: 'clamp(2.8rem, 7vw, 5.2rem)',
+              fontSize: 'clamp(2.1rem, 6.5vw, 5.2rem)',
               fontWeight: 900,
               letterSpacing: '-0.04em',
               lineHeight: 1.05,
               marginBottom: '1.5rem',
               color: 'white',
+              wordBreak: 'break-word',
             }}
           >
             Transform Your{' '}
@@ -115,7 +123,7 @@ export default function Hero() {
             transition={{ duration: 0.6, delay: 0.35 }}
             style={{
               fontFamily: 'Inter, sans-serif',
-              fontSize: '1.15rem',
+              fontSize: 'clamp(0.95rem, 2.5vw, 1.15rem)',
               color: 'rgba(255,255,255,0.75)',
               lineHeight: 1.7,
               maxWidth: '540px',
@@ -137,7 +145,7 @@ export default function Hero() {
               to="/products"
               id="hero-explore-btn"
               className="btn btn-primary btn-ripple"
-              style={{ fontSize: '1rem', padding: '0.875rem 2rem' }}
+              style={{ fontSize: '1rem', padding: '0.875rem 2rem', minHeight: '48px', flex: '1 1 auto', maxWidth: '280px', justifyContent: 'center' }}
             >
               🎨 Explore Products
             </Link>
@@ -145,7 +153,7 @@ export default function Hero() {
               href={`tel:${BUSINESS_INFO.phone}`}
               id="hero-call-btn"
               className="btn btn-outline btn-ripple"
-              style={{ fontSize: '1rem', padding: '0.875rem 2rem' }}
+              style={{ fontSize: '1rem', padding: '0.875rem 2rem', minHeight: '48px', flex: '1 1 auto', maxWidth: '280px', justifyContent: 'center' }}
             >
               📞 Call Now
             </a>

@@ -132,7 +132,7 @@ export default function Contact() {
         <div
           style={{
             display: 'grid',
-            gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))',
+            gridTemplateColumns: 'repeat(auto-fit, minmax(min(100%, 280px), 1fr))',
             gap: '2rem',
             alignItems: 'start',
           }}
@@ -146,12 +146,12 @@ export default function Contact() {
             style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
           >
             {/* Quick Contact Buttons */}
-            <div style={{ display: 'flex', gap: '1rem' }}>
+            <div style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap' }}>
               <a
                 href={`tel:${BUSINESS_INFO.phone}`}
                 id="contact-call-btn"
                 className="btn btn-primary btn-ripple"
-                style={{ flex: 1, justifyContent: 'center', fontSize: '0.9rem' }}
+                style={{ flex: '1 1 140px', justifyContent: 'center', fontSize: '0.9rem', minHeight: '44px' }}
               >
                 📞 Call Now
               </a>
@@ -162,11 +162,12 @@ export default function Contact() {
                 id="contact-whatsapp-btn"
                 className="btn btn-outline"
                 style={{
-                  flex: 1,
+                  flex: '1 1 140px',
                   justifyContent: 'center',
                   fontSize: '0.9rem',
                   borderColor: '#25D366',
                   color: '#25D366',
+                  minHeight: '44px',
                 }}
               >
                 💬 WhatsApp
@@ -295,7 +296,7 @@ export default function Contact() {
                 WebkitBackdropFilter: 'blur(20px)',
                 border: '1px solid rgba(255,255,255,0.08)',
                 borderRadius: '1.5rem',
-                padding: '2.5rem',
+                padding: 'clamp(1.25rem, 4vw, 2.5rem)',
                 position: 'relative',
                 overflow: 'hidden',
               }}
