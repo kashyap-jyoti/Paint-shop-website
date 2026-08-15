@@ -25,7 +25,8 @@ function ProductCard({ product, index }: ProductCardProps) {
       id={`product-card-${product.id}`}
       initial={{ opacity: 0, y: 40 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: true, margin: '-50px' }}
+      viewport={{ once: true, amount: 0.1 }}
+      whileHover={{ y: -8, scale: 1.01 }}
       transition={{ duration: 0.5, delay: (index % 3) * 0.1, ease: [0.16, 1, 0.3, 1] }}
       onHoverStart={() => setHovered(true)}
       onHoverEnd={() => setHovered(false)}
@@ -38,11 +39,10 @@ function ProductCard({ product, index }: ProductCardProps) {
         borderRadius: '1.25rem',
         overflow: 'hidden',
         cursor: 'pointer',
-        transition: 'transform 0.35s cubic-bezier(0.16,1,0.3,1), box-shadow 0.35s ease',
-        transform: hovered ? 'translateY(-8px) scale(1.01)' : 'translateY(0) scale(1)',
         boxShadow: hovered
           ? '0 20px 60px rgba(0,0,0,0.5), 0 0 40px rgba(249,115,22,0.15)'
           : '0 4px 20px rgba(0,0,0,0.2)',
+        transition: 'box-shadow 0.35s ease',
       }}
     >
       {/* Background Animated Paint Asset */}

@@ -51,7 +51,6 @@ export default function Hero() {
             opacity: 0.25,
             zIndex: 1,
             filter: 'saturate(2) brightness(0.85)',
-            transition: 'background-image 0.25s linear',
           }}
         />
       )}

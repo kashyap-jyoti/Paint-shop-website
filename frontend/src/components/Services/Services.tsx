@@ -102,7 +102,7 @@ export default function Services() {
                 id={`service-card-${service.id}`}
                 initial={{ opacity: 0, y: 30 }}
                 whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true, margin: '-40px' }}
+                viewport={{ once: true, amount: 0.1 }}
                 transition={{ delay: (i % 3) * 0.1, duration: 0.5, ease: [0.16, 1, 0.3, 1] }}
                 whileHover={{ y: -6, boxShadow: '0 20px 60px rgba(0,0,0,0.4), 0 0 30px rgba(249,115,22,0.1)' } as any}
                 style={{

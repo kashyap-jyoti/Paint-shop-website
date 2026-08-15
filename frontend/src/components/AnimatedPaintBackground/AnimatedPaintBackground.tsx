@@ -1,19 +1,8 @@
 import { useEffect, useRef, useState, useCallback } from 'react';
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
+import { getPaintFrames } from '@utils/imageLoader';
 
-/**
- * Dynamically import ALL paint frames via Vite glob.
- * Sorted alphabetically so frame_00 → frame_59 in order.
- */
-const frameModules = import.meta.glob('../../assets/images/hero/frames/*.gif', {
-  eager: true,
-  import: 'default',
-}) as Record<string, string>;
-
-const ALL_FRAMES: string[] = Object.entries(frameModules)
-  .sort(([a], [b]) => a.localeCompare(b))
-  .map(([, url]) => url as string);
-
+const ALL_FRAMES: string[] = getPaintFrames();
 const TOTAL = ALL_FRAMES.length; // 60
 
 /**
@@ -46,13 +35,9 @@ export default function AnimatedPaintBackground() {
     const elapsed = timestamp - lastTime.current;
     if (elapsed > 100) {
       setPrimaryFrame((f) => (f + 1) % TOTAL);
+      setSecondaryFrame((f) => (f + 2) % TOTAL);
+      setTertiaryFrame((f) => (f + 3) % TOTAL);
       lastTime.current = timestamp;
-    }
-    if (elapsed > 200) {
-      setSecondaryFrame((f) => (f + 1) % TOTAL);
-    }
-    if (elapsed > 300) {
-      setTertiaryFrame((f) => (f + 1) % TOTAL);
     }
     animRef.current = requestAnimationFrame(animate);
   }, []);
@@ -98,7 +83,6 @@ export default function AnimatedPaintBackground() {
           opacity: 0.24,
           scale: scrollScale,
           filter: 'saturate(1.8) brightness(0.75)',
-          transition: 'background-image 0.2s linear',
         }}
       />
 

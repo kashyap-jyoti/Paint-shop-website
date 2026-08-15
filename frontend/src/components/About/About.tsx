@@ -72,7 +72,7 @@ function StatCard({
 
 export default function About() {
   const statsRef = useRef<HTMLDivElement>(null);
-  const statsInView = useInView(statsRef, { once: true, margin: '-100px' });
+  const statsInView = useInView(statsRef, { once: true, amount: 0.1 });
   const heroImageSrc = getHeroImage() || getPaintBucketImage();
 
   const aboutRows = [
