@@ -56,9 +56,10 @@ export default function AnimatedPaintBackground() {
     return () => window.removeEventListener('mousemove', handleMouse);
   }, [mouseX, mouseY]);
 
-  if (TOTAL === 0) return null;
-
-  const scatterIndices = [0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 3, 9, 15, 21, 27];
+  const isMobile = typeof window !== 'undefined' && window.innerWidth < 768;
+  const scatterIndices = isMobile
+    ? [0, 12, 24, 36, 48, 9, 21]
+    : [0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 3, 9, 15, 21, 27];
 
   return (
     <div
