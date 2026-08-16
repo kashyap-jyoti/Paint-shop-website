@@ -11,11 +11,11 @@ export default function Hero() {
   const animFrameRef = useRef<number>(0);
   const lastFrameTime = useRef(0);
 
-  // Frame cycling loop (~11fps)
+  // Smooth continuous frame cycling (~9fps) across both desktop & mobile
   const animateFrames = useCallback((timestamp: number) => {
     if (FRAMES.length === 0) return;
     const elapsed = timestamp - lastFrameTime.current;
-    if (elapsed > 90) {
+    if (elapsed > 110) {
       setCurrentFrame((f) => (f + 1) % FRAMES.length);
       lastFrameTime.current = timestamp;
     }
@@ -30,79 +30,100 @@ export default function Hero() {
   return (
     <section
       id="hero"
+      className="hero-section"
       style={{
         position: 'relative',
-        minHeight: '100vh',
+        minHeight: '85vh',
         display: 'flex',
         alignItems: 'center',
         overflow: 'hidden',
-        background: 'linear-gradient(135deg, #090814 0%, #151138 40%, #0d1226 100%)',
+        background: 'linear-gradient(135deg, rgba(7,7,18,0.55) 0%, rgba(18,16,46,0.65) 45%, rgba(11,15,32,0.7) 100%)',
       }}
     >
-      {/* ── LAYER 1: Background Animated Frame Texture */}
+      {/* ── LAYER 1: Background Paint Frame Animation (Visible & Smooth) */}
       {FRAMES.length > 0 && (
         <div
+          className="hero-bg-frame"
           style={{
             position: 'absolute',
             inset: 0,
             backgroundImage: `url(${FRAMES[currentFrame]})`,
             backgroundSize: 'cover',
             backgroundPosition: 'center',
-            opacity: 0.25,
+            opacity: 0.38,
             zIndex: 1,
-            filter: 'saturate(2) brightness(0.85)',
+            filter: 'saturate(1.8) brightness(0.85)',
+            transition: 'background-image 0.1s ease-in-out',
           }}
         />
       )}
 
-      {/* ── Hero Content (Typography & CTAs sitting naturally over background animation) */}
+      {/* ── LAYER 2: Dark Overlay gradient (Semi-transparent so paint motion shines through) */}
       <div
-        className="container"
+        style={{
+          position: 'absolute',
+          inset: 0,
+          background: 'radial-gradient(circle at 50% 35%, rgba(249,115,22,0.1) 0%, rgba(10,10,20,0.55) 60%, rgba(7,7,18,0.82) 100%)',
+          zIndex: 2,
+          pointerEvents: 'none',
+        }}
+      />
+
+      {/* ── LAYER 3: Hero Content Container */}
+      <div
+        className="container hero-container"
         style={{
           position: 'relative',
           zIndex: 10,
-          paddingTop: 'calc(var(--nav-height) + 2.5rem)',
-          paddingBottom: '4rem',
+          width: '100%',
         }}
       >
-        <div style={{ maxWidth: '680px' }}>
-          {/* Badge */}
+        <div className="hero-content-wrapper">
+          {/* 1. Trust Badge — 0.1s staggered entry */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.5, delay: 0.1 }}
-            className="section-tag"
+            transition={{ duration: 0.5, delay: 0.1, ease: 'easeOut' }}
+            className="hero-trust-badge"
             style={{
-              marginBottom: '1.5rem',
-              background: 'rgba(249,115,22,0.18)',
-              borderColor: 'rgba(249,115,22,0.4)',
-              fontSize: 'clamp(0.7rem, 2.5vw, 0.8rem)',
-              maxWidth: '100%',
-              whiteSpace: 'normal',
+              display: 'inline-flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              gap: '0.4rem',
+              padding: '0.35rem 0.85rem',
+              background: 'rgba(249, 115, 22, 0.15)',
+              border: '1px solid rgba(249, 115, 22, 0.4)',
+              borderRadius: '9999px',
+              color: '#fb923c',
+              fontSize: 'clamp(11px, 3.2vw, 13px)',
+              fontWeight: 600,
+              letterSpacing: '0.03em',
+              backdropFilter: 'blur(8px)',
+              boxShadow: '0 0 15px rgba(249, 115, 22, 0.2)',
             }}
           >
-            <span>⭐</span>
-            <span>Trusted Store Since 10+ Years · Ghazipur, UP</span>
+            <span>★</span>
+            <span>Trusted Store • 10+ Years • Ghazipur</span>
           </motion.div>
 
-          {/* Heading */}
+          {/* 2. Main Heading — 0.25s staggered entry */}
           <motion.h1
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.7, delay: 0.2, ease: [0.16, 1, 0.3, 1] }}
+            transition={{ duration: 0.6, delay: 0.25, ease: [0.16, 1, 0.3, 1] }}
+            className="hero-heading"
             style={{
               fontFamily: 'Outfit, sans-serif',
-              fontSize: 'clamp(2.1rem, 6.5vw, 5.2rem)',
-              fontWeight: 900,
-              letterSpacing: '-0.04em',
-              lineHeight: 1.05,
-              marginBottom: '1.5rem',
+              fontWeight: 800,
+              letterSpacing: '-0.03em',
+              lineHeight: 1.02,
               color: 'white',
               wordBreak: 'break-word',
             }}
           >
-            Transform Your{' '}
+            <span className="hero-heading-line">Transform Your </span>
             <span
+              className="hero-heading-accent"
               style={{
                 background: 'linear-gradient(135deg, #f97316 0%, #ef4444 50%, #ec4899 100%)',
                 WebkitBackgroundClip: 'text',
@@ -113,55 +134,63 @@ export default function Hero() {
             >
               Walls
             </span>{' '}
-            Into Masterpieces
+            <span className="hero-heading-line">Into Masterpieces</span>
           </motion.h1>
 
-          {/* Subheading */}
+          {/* 3. Description — 0.4s staggered entry */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.35 }}
+            transition={{ duration: 0.55, delay: 0.4, ease: 'easeOut' }}
+            className="hero-description"
             style={{
               fontFamily: 'Inter, sans-serif',
-              fontSize: 'clamp(0.95rem, 2.5vw, 1.15rem)',
-              color: 'rgba(255,255,255,0.75)',
-              lineHeight: 1.7,
-              maxWidth: '540px',
-              marginBottom: '2.5rem',
+              color: 'rgba(255, 255, 255, 0.85)',
+              lineHeight: 1.5,
             }}
           >
-            Premium paints, construction hardware, and expert color consultation at{' '}
-            <strong style={{ color: 'white' }}>Satyam Hardware & Paint</strong>, Rauza, Ghazipur.
+            Premium paints, hardware &amp; expert colour guidance for your home.
+            <span className="hero-desc-extra"> Serving Ghazipur with trusted products.</span>
           </motion.p>
 
-          {/* CTAs */}
+          {/* 4. CTA Buttons — 0.55s staggered entry */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.6, delay: 0.5 }}
-            style={{ display: 'flex', gap: '1rem', flexWrap: 'wrap', marginBottom: '3rem' }}
+            transition={{ duration: 0.55, delay: 0.55, ease: 'easeOut' }}
+            className="hero-cta-group"
           >
-            <Link
-              to="/products"
-              id="hero-explore-btn"
-              className="btn btn-primary btn-ripple"
-              style={{ fontSize: '1rem', padding: '0.875rem 2rem', minHeight: '48px', flex: '1 1 auto', maxWidth: '280px', justifyContent: 'center' }}
+            <motion.div
+              whileHover={{ scale: 1.04, boxShadow: '0 0 30px rgba(249,115,22,0.5)' }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ duration: 0.2 }}
+              style={{ flex: '1 1 auto', maxWidth: '360px', borderRadius: '9999px' }}
             >
-              🎨 Explore Products
-            </Link>
-            <a
-              href={`tel:${BUSINESS_INFO.phone}`}
-              id="hero-call-btn"
-              className="btn btn-outline btn-ripple"
-              style={{ fontSize: '1rem', padding: '0.875rem 2rem', minHeight: '48px', flex: '1 1 auto', maxWidth: '280px', justifyContent: 'center' }}
+              <Link
+                to="/products"
+                id="hero-explore-btn"
+                className="btn btn-primary btn-ripple hero-btn"
+              >
+                🎨 Explore Products
+              </Link>
+            </motion.div>
+            <motion.div
+              whileHover={{ scale: 1.04, boxShadow: '0 0 20px rgba(249,115,22,0.25)' }}
+              whileTap={{ scale: 0.97 }}
+              transition={{ duration: 0.2 }}
+              style={{ flex: '1 1 auto', maxWidth: '360px', borderRadius: '9999px' }}
             >
-              📞 Call Now
-            </a>
+              <a
+                href={`tel:${BUSINESS_INFO.phone}`}
+                id="hero-call-btn"
+                className="btn btn-outline btn-ripple hero-btn hero-btn-secondary"
+              >
+                📞 Call Now
+              </a>
+            </motion.div>
           </motion.div>
         </div>
       </div>
-
-
     </section>
   );
 }

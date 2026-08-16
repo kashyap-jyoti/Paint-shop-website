@@ -29,11 +29,11 @@ export default function AnimatedPaintBackground() {
   const scrollRotate = useTransform(scrollYProgress, [0, 1], [0, 20]);
   const scrollScale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.18, 1.08]);
 
-  // Frame animation loop
+  // Frame animation loop (~9fps)
   const animate = useCallback((timestamp: number) => {
     if (TOTAL === 0) return;
     const elapsed = timestamp - lastTime.current;
-    if (elapsed > 100) {
+    if (elapsed > 110) {
       setPrimaryFrame((f) => (f + 1) % TOTAL);
       setSecondaryFrame((f) => (f + 2) % TOTAL);
       setTertiaryFrame((f) => (f + 3) % TOTAL);

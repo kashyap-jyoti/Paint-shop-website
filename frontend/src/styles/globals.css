@@ -464,6 +464,158 @@ a {
 /* ═══════════════════════════════════════════
    RESPONSIVE UTILITIES
 ═══════════════════════════════════════════ */
+:root {
+  --nav-height: 4.25rem; /* ~68px on mobile */
+}
+
+@media (min-width: 1024px) {
+  :root {
+    --nav-height: 4.5rem;
+  }
+}
+
+/* Navbar Logo Badge — Circular Design */
+.nav-logo-badge {
+  width: 46px;
+  height: 46px;
+  border-radius: 50% !important;
+  aspect-ratio: 1 / 1;
+}
+
+@media (min-width: 768px) {
+  .nav-logo-badge {
+    width: 52px;
+    height: 52px;
+  }
+}
+
+/* Hero Section Base */
+.hero-section {
+  padding-top: calc(var(--nav-height) + 1.25rem);
+  padding-bottom: 3.5rem;
+  min-height: calc(100vh - var(--nav-height));
+}
+
+.hero-content-wrapper {
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.hero-trust-badge {
+  margin-bottom: 1.25rem;
+}
+
+.hero-heading {
+  font-size: clamp(38px, 10vw, 52px);
+  margin-bottom: 1.25rem;
+}
+
+.hero-description {
+  font-size: clamp(0.95rem, 4vw, 1.15rem);
+  max-width: 540px;
+  margin-bottom: 2rem;
+}
+
+.hero-cta-group {
+  display: flex;
+  gap: 0.85rem;
+  flex-wrap: wrap;
+  width: 100%;
+}
+
+.hero-btn {
+  font-size: 0.95rem;
+  padding: 0.85rem 1.5rem;
+  min-height: 50px;
+  height: 50px;
+  width: 100%;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius-full);
+}
+
+/* Mobile specific styling (< 768px) */
+@media (max-width: 767px) {
+  .hero-section {
+    padding-top: calc(var(--nav-height) + 1rem);
+    padding-bottom: 2.5rem;
+    padding-left: 20px;
+    padding-right: 20px;
+    min-height: auto;
+  }
+
+  .hero-content-wrapper {
+    align-items: center;
+    text-align: center;
+    margin: 0 auto;
+  }
+
+  .hero-heading {
+    font-size: clamp(34px, 9.5vw, 46px);
+    line-height: 1.02;
+    font-weight: 800;
+  }
+
+  .hero-heading-line {
+    display: block;
+  }
+
+  .hero-description {
+    font-size: 1rem;
+    max-width: 340px;
+    line-height: 1.5;
+    margin-bottom: 1.75rem;
+  }
+
+  .hero-desc-extra {
+    display: block;
+    margin-top: 0.25rem;
+    color: rgba(255, 255, 255, 0.65);
+    font-size: 0.88rem;
+  }
+
+  .hero-cta-group {
+    justify-content: center;
+  }
+}
+
+/* Very small mobile screens (< 380px, e.g. 320px, 375px) */
+@media (max-width: 380px) {
+  .hero-cta-group {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.75rem;
+  }
+
+  .hero-btn {
+    width: 100%;
+    max-width: 100% !important;
+  }
+}
+
+/* Desktop layout (≥ 768px) */
+@media (min-width: 768px) {
+  .hero-heading {
+    font-size: clamp(2.5rem, 6.5vw, 5.2rem);
+  }
+
+  .hero-heading-line {
+    display: inline;
+  }
+
+  .hero-cta-group {
+    width: auto;
+  }
+
+  .hero-btn {
+    width: auto;
+    min-width: 200px;
+  }
+}
+
 @media (max-width: 768px) {
   :root {
     --section-py: 3.5rem;

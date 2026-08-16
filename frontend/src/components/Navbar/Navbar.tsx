@@ -61,6 +61,7 @@ export default function Navbar() {
         initial={{ y: -100, opacity: 0 }}
         animate={{ y: 0, opacity: 1 }}
         transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
+        className="nav-header"
         style={{
           position: 'fixed',
           top: 0,
@@ -68,20 +69,21 @@ export default function Navbar() {
           right: 0,
           zIndex: 1000,
           height: 'var(--nav-height)',
-          background: scrolled ? 'rgba(10, 10, 15, 0.88)' : 'transparent',
-          backdropFilter: scrolled ? 'blur(20px) saturate(1.8)' : 'none',
-          WebkitBackdropFilter: scrolled ? 'blur(20px) saturate(1.8)' : 'none',
-          borderBottom: scrolled ? '1px solid rgba(255,255,255,0.07)' : 'none',
-          boxShadow: scrolled ? '0 4px 30px rgba(0,0,0,0.35)' : 'none',
+          background: scrolled ? 'rgba(10, 10, 15, 0.92)' : 'rgba(10, 10, 18, 0.78)',
+          backdropFilter: 'blur(18px) saturate(1.6)',
+          WebkitBackdropFilter: 'blur(18px) saturate(1.6)',
+          borderBottom: scrolled ? '1px solid rgba(255,255,255,0.08)' : '1px solid rgba(255,255,255,0.04)',
+          boxShadow: scrolled ? '0 4px 30px rgba(0,0,0,0.4)' : '0 2px 15px rgba(0,0,0,0.2)',
           transition: 'background 0.35s ease, backdrop-filter 0.35s ease, box-shadow 0.35s ease, border-bottom 0.35s ease',
         }}
       >
         {/* ── Inner container ── */}
         <div
+          className="nav-container"
           style={{
             maxWidth: '1280px',
             margin: '0 auto',
-            padding: '0 clamp(0.75rem, 3vw, 1.25rem)',
+            padding: '0 20px',
             height: '100%',
             display: 'flex',
             alignItems: 'center',
@@ -96,35 +98,44 @@ export default function Navbar() {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: '0.6rem',
+              gap: '0.65rem',
               flexShrink: 0,
               minWidth: 0,
             }}
           >
             <motion.div
+              className="nav-logo-badge"
               style={{
-                width: '36px',
-                height: '36px',
-                borderRadius: '8px',
+                width: '44px',
+                height: '44px',
+                borderRadius: '50%',
                 overflow: 'hidden',
                 flexShrink: 0,
+                boxShadow: '0 4px 15px rgba(0,0,0,0.35), 0 0 12px rgba(249,115,22,0.2)',
+                border: '1.5px solid rgba(255,255,255,0.25)',
+                background: '#0a0a12',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                aspectRatio: '1 / 1',
               }}
-              whileHover={{ rotate: [-10, 10, -5, 0], transition: { duration: 0.4 } }}
+              whileHover={{ scale: 1.06, transition: { duration: 0.2 } }}
+              whileTap={{ scale: 0.95 }}
             >
               <img
                 src={shopLogoSrc}
                 alt="Satyam Hardware & Paint Logo"
-                style={{ width: '100%', height: '100%', objectFit: 'cover' }}
+                style={{ width: '100%', height: '100%', objectFit: 'contain' }}
               />
             </motion.div>
 
-            {/* Text — hide subtitle on very small screens */}
+            {/* Text — clean business name */}
             <div style={{ minWidth: 0 }}>
               <span
                 style={{
                   fontFamily: 'Outfit, sans-serif',
                   fontWeight: 800,
-                  fontSize: 'clamp(0.95rem, 2.5vw, 1.1rem)',
+                  fontSize: 'clamp(0.95rem, 2.5vw, 1.15rem)',
                   background: 'linear-gradient(135deg, #f97316, #ef4444)',
                   WebkitBackgroundClip: 'text',
                   WebkitTextFillColor: 'transparent',
@@ -139,15 +150,15 @@ export default function Navbar() {
               <span
                 className="nav-subtitle"
                 style={{
-                  color: 'rgba(255,255,255,0.45)',
-                  fontSize: '0.6rem',
-                  letterSpacing: '0.1em',
+                  color: 'rgba(255,255,255,0.6)',
+                  fontSize: '0.62rem',
+                  letterSpacing: '0.08em',
                   textTransform: 'uppercase',
                   fontFamily: 'Inter, sans-serif',
                   whiteSpace: 'nowrap',
                 }}
               >
-                &amp; Paint — Ghazipur
+                &amp; Paint Store
               </span>
             </div>
           </Link>
@@ -234,16 +245,16 @@ export default function Navbar() {
               aria-expanded={menuOpen}
               aria-controls="mobile-menu"
               style={{
-                background: 'none',
-                border: 'none',
+                background: 'rgba(255,255,255,0.06)',
+                border: '1px solid rgba(255,255,255,0.12)',
                 cursor: 'pointer',
                 display: 'flex',
                 flexDirection: 'column',
                 gap: '5px',
                 padding: '8px',
-                borderRadius: '8px',
-                minWidth: '44px',
-                minHeight: '44px',
+                borderRadius: '10px',
+                width: '44px',
+                height: '44px',
                 alignItems: 'center',
                 justifyContent: 'center',
               }}
@@ -254,7 +265,7 @@ export default function Navbar() {
                   key={i}
                   style={{
                     display: 'block',
-                    width: '22px',
+                    width: '20px',
                     height: '2px',
                     background: 'white',
                     borderRadius: '9999px',

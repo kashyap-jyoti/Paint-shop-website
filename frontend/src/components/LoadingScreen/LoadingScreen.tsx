@@ -68,21 +68,25 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
             transition={{ delay: 0.2, duration: 0.6 }}
             style={{ textAlign: 'center', zIndex: 1 }}
           >
-            {/* Extracted Paint Asset graphic */}
+            {/* Circular Shop Logo */}
             <motion.div
               style={{
-                width: '110px',
-                height: '110px',
-                margin: '0 auto 1.5rem',
-                borderRadius: '1.25rem',
+                width: 'clamp(80px, 20vw, 120px)',
+                height: 'clamp(80px, 20vw, 120px)',
+                aspectRatio: '1 / 1',
+                borderRadius: '50%',
                 overflow: 'hidden',
+                margin: '0 auto 1.5rem',
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
-                boxShadow: '0 12px 40px rgba(249,115,22,0.4)',
+                border: '1.5px solid rgba(255, 255, 255, 0.25)',
+                boxShadow: '0 8px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(249, 115, 22, 0.25)',
+                background: '#0a0a12',
+                flexShrink: 0,
               }}
-              animate={{ rotate: [0, -6, 6, -3, 3, 0], scale: [1, 1.05, 1] }}
-              transition={{ duration: 2, repeat: Infinity, ease: 'easeInOut' }}
+              animate={{ scale: [1, 1.04, 1] }}
+              transition={{ duration: 3, repeat: Infinity, ease: 'easeInOut' }}
             >
               <img
                 src={shopLogoSrc}
@@ -90,7 +94,7 @@ export default function LoadingScreen({ onComplete }: LoadingScreenProps) {
                 style={{
                   width: '100%',
                   height: '100%',
-                  objectFit: 'cover',
+                  objectFit: 'contain',
                 }}
               />
             </motion.div>
