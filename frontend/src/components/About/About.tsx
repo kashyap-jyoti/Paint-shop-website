@@ -141,7 +141,7 @@ export default function About() {
             transition={{ delay: 0.1 }}
             className="section-heading"
           >
-            Ghazipur's Premier <span className="gradient-text">Paint & Hardware</span> Destination
+            Why Choose <span className="gradient-text">Satyam Hardware &amp; Paint</span>
           </motion.h2>
         </div>
 
@@ -236,7 +236,8 @@ export default function About() {
                 >
                   <img
                     src={row.image}
-                    alt={row.title}
+                    alt={`${row.title} - Satyam Hardware & Paint Ghazipur`}
+                    loading="lazy"
                     style={{
                       width: '100%',
                       height: '100%',

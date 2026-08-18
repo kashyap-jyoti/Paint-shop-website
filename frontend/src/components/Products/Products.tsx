@@ -118,7 +118,8 @@ function ProductCard({ product, index }: ProductCardProps) {
         >
           <img
             src={displaySrc}
-            alt={product.name}
+            alt={`${product.name} at Satyam Hardware & Paint Ghazipur`}
+            loading="lazy"
             style={{
               width: '100%',
               height: '100%',
@@ -250,8 +251,7 @@ export default function Products() {
             transition={{ delay: 0.1 }}
             className="section-heading"
           >
-            Premium Paint &{' '}
-            <span className="gradient-text">Hardware</span> Collection
+            Our <span className="gradient-text">Products</span>
           </motion.h2>
 
           <motion.p

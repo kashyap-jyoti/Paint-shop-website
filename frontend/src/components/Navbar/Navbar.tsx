@@ -124,7 +124,7 @@ export default function Navbar() {
             >
               <img
                 src={shopLogoSrc}
-                alt="Satyam Hardware & Paint Logo"
+                alt="Satyam Hardware &amp; Paint Store Logo Ghazipur"
                 style={{ width: '100%', height: '100%', objectFit: 'contain' }}
               />
             </motion.div>

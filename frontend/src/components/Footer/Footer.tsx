@@ -117,7 +117,7 @@ export default function Footer() {
               }}
             >
               <div style={{ width: '48px', height: '48px', borderRadius: '50%', overflow: 'hidden', border: '1.5px solid rgba(255,255,255,0.2)', boxShadow: '0 4px 12px rgba(0,0,0,0.35)', flexShrink: 0, aspectRatio: '1 / 1' }}>
-                <img src={shopLogoSrc} alt="Satyam Hardware & Paint Logo" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
+                <img src={shopLogoSrc} alt="Satyam Hardware &amp; Paint Store Logo Ghazipur" style={{ width: '100%', height: '100%', objectFit: 'contain' }} />
               </div>
               <div>
                 <span

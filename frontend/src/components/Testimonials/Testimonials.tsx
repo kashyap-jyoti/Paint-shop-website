@@ -118,7 +118,8 @@ function TestimonialCard({ t, index }: { t: (typeof TESTIMONIALS)[0]; index: num
         >
           <img
             src={frameAsset}
-            alt={t.name}
+            alt=""
+            loading="lazy"
             style={{ width: '100%', height: '100%', objectFit: 'cover', filter: `hue-rotate(${index * 50}deg)` }}
           />
         </div>

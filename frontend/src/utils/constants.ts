@@ -2,7 +2,7 @@
 export const BUSINESS_INFO = {
   name: 'Satyam Hardware & Paint Store',
   tagline: 'Premium Paints & Hardware Supplies',
-  phone: '9236514590',
+  phone: '+919236514590',
   phoneDisplay: '+91 92365 14590',
   whatsapp: '919236514590',
   gstin: '09ENVPK6868Q1ZE',

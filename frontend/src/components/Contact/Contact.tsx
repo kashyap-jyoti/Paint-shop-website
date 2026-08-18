@@ -114,7 +114,7 @@ export default function Contact() {
             transition={{ delay: 0.1 }}
             className="section-heading"
           >
-            Visit Us or <span className="gradient-text">Connect Online</span>
+            Visit <span className="gradient-text">Our Store</span>
           </motion.h2>
 
           <motion.p

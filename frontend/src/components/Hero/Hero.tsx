@@ -121,7 +121,8 @@ export default function Hero() {
               wordBreak: 'break-word',
             }}
           >
-            <span className="hero-heading-line">Transform Your </span>
+            <span className="hero-heading-line">Satyam Hardware &amp; Paint</span>
+            <br />
             <span
               className="hero-heading-accent"
               style={{
@@ -132,9 +133,9 @@ export default function Hero() {
                 display: 'inline-block',
               }}
             >
-              Walls
+              Premium Paints &amp; Hardware
             </span>{' '}
-            <span className="hero-heading-line">Into Masterpieces</span>
+            <span className="hero-heading-line">in Ghazipur</span>
           </motion.h1>
 
           {/* 3. Description — 0.4s staggered entry */}
@@ -149,8 +150,7 @@ export default function Hero() {
               lineHeight: 1.5,
             }}
           >
-            Premium paints, hardware &amp; expert colour guidance for your home.
-            <span className="hero-desc-extra"> Serving Ghazipur with trusted products.</span>
+            Ghazipur's trusted paint and hardware store in Rauza. Premium interior &amp; exterior paints, Berger Paints, wall putty, polishes, automated colour mixing, and hardware supplies.
           </motion.p>
 
           {/* 4. CTA Buttons — 0.55s staggered entry */}

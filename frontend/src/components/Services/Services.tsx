@@ -70,7 +70,7 @@ export default function Services() {
             transition={{ delay: 0.1 }}
             className="section-heading"
           >
-            Complete Painting & <span className="gradient-text">Hardware Solutions</span>
+            Our <span className="gradient-text">Services</span>
           </motion.h2>
 
           <motion.p
@@ -152,7 +152,8 @@ export default function Services() {
                 >
                   <img
                     src={frameAsset}
-                    alt={service.title}
+                    alt={`${service.title} - Satyam Hardware & Paint Ghazipur`}
+                    loading="lazy"
                     style={{
                       width: '100%',
                       height: '100%',

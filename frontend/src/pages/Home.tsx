@@ -5,12 +5,19 @@ import About from '@components/About/About';
 import Brands from '@components/Brands/Brands';
 import Testimonials from '@components/Testimonials/Testimonials';
 import Contact from '@components/Contact/Contact';
+import { useSeo } from '@utils/useSeo';
 
 /**
  * Home page — assembles all sections in sequence.
  * Each section has its own scroll-triggered animations.
  */
 export default function Home() {
+  useSeo({
+    title: 'Satyam Hardware & Paint | Paint & Hardware Shop in Ghazipur',
+    description: 'Satyam Hardware & Paint in Rauza, Ghazipur offers interior and exterior paints, Berger Paints, wall putty, polishes, colour mixing and hardware products.',
+    canonicalPath: '/',
+  });
+
   return (
     <>
       <Hero />

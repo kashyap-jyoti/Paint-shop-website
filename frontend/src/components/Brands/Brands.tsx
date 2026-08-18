@@ -74,7 +74,8 @@ function BrandCard({ brand, index }: { brand: (typeof BRANDS)[0]; index: number 
       >
         <img
           src={logoDisplaySrc}
-          alt={brand.name}
+          alt={`${brand.name} Authorized Dealer at Satyam Hardware & Paint Ghazipur`}
+          loading="lazy"
           style={{
             width: '100%',
             height: '100%',
