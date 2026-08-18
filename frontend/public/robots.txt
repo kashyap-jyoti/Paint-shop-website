@@ -1,4 +1,5 @@
 User-agent: *
 Allow: /
 
-Sitemap: https://satyamhardwarepaint.com/sitemap.xml
+
+Sitemap: https://paint-shop-website-gamma.vercel.app/sitemap.xml
