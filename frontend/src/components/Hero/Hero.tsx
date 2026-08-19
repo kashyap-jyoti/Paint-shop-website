@@ -1,31 +1,73 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { BUSINESS_INFO } from '@utils/constants';
 import { getPaintFrames } from '@utils/imageLoader';
 
+// Centralized array of existing uploaded hero image paths
 const FRAMES = getPaintFrames();
 
-export default function Hero() {
-  const [currentFrame, setCurrentFrame] = useState(0);
-  const animFrameRef = useRef<number>(0);
-  const lastFrameTime = useRef(0);
+// Global set to ensure image URLs are preloaded into browser memory cache
+const preloadedCache = new Set<string>();
 
-  // Smooth continuous frame cycling (~9fps) across both desktop & mobile
-  const animateFrames = useCallback((timestamp: number) => {
-    if (FRAMES.length === 0) return;
-    const elapsed = timestamp - lastFrameTime.current;
-    if (elapsed > 110) {
-      setCurrentFrame((f) => (f + 1) % FRAMES.length);
-      lastFrameTime.current = timestamp;
+function preloadHeroImages(images: string[]) {
+  images.forEach((src) => {
+    if (!preloadedCache.has(src)) {
+      const img = new Image();
+      img.src = src;
+      preloadedCache.add(src);
     }
-    animFrameRef.current = requestAnimationFrame(animateFrames);
-  }, []);
+  });
+}
+
+export default function Hero() {
+  // Two persistent layers for continuous ping-pong crossfade
+  const [frameAIndex, setFrameAIndex] = useState(0);
+  const [frameBIndex, setFrameBIndex] = useState(1 % (FRAMES.length || 1));
+  const [activeLayer, setActiveLayer] = useState<'A' | 'B'>('A');
+
+  const currentIndexRef = useRef(0);
+  const activeLayerRef = useRef<'A' | 'B'>('A');
 
   useEffect(() => {
-    animFrameRef.current = requestAnimationFrame(animateFrames);
-    return () => cancelAnimationFrame(animFrameRef.current);
-  }, [animateFrames]);
+    if (FRAMES.length === 0) return;
+
+    // A. Preload all uploaded existing hero frame images
+    preloadHeroImages(FRAMES);
+
+    // Respect prefers-reduced-motion setting
+    if (typeof window !== 'undefined') {
+      const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
+      if (mediaQuery.matches) return;
+    }
+
+    // C. Single animation timer for crossfading hero background images
+    const interval = setInterval(() => {
+      const totalFrames = FRAMES.length;
+      if (totalFrames <= 1) return;
+
+      const nextIndex = (currentIndexRef.current + 1) % totalFrames;
+      currentIndexRef.current = nextIndex;
+
+      if (activeLayerRef.current === 'A') {
+        // Update Layer B (currently opacity: 0) to next image, then fade it in
+        setFrameBIndex(nextIndex);
+        setActiveLayer('B');
+        activeLayerRef.current = 'B';
+      } else {
+        // Update Layer A (currently opacity: 0) to next image, then fade it in
+        setFrameAIndex(nextIndex);
+        setActiveLayer('A');
+        activeLayerRef.current = 'A';
+      }
+    }, 3000);
+
+    return () => clearInterval(interval);
+  }, []);
+
+  const hasFrames = FRAMES.length > 0;
+  const imageA = hasFrames ? FRAMES[frameAIndex] : '';
+  const imageB = hasFrames ? FRAMES[frameBIndex] : '';
 
   return (
     <section
@@ -40,36 +82,57 @@ export default function Hero() {
         background: 'linear-gradient(135deg, rgba(7,7,18,0.55) 0%, rgba(18,16,46,0.65) 45%, rgba(11,15,32,0.7) 100%)',
       }}
     >
-      {/* ── LAYER 1: Background Paint Frame Animation (Visible & Smooth) */}
-      {FRAMES.length > 0 && (
-        <div
-          className="hero-bg-frame"
-          style={{
-            position: 'absolute',
-            inset: 0,
-            backgroundImage: `url(${FRAMES[currentFrame]})`,
-            backgroundSize: 'cover',
-            backgroundPosition: 'center',
-            opacity: 0.38,
-            zIndex: 1,
-            filter: 'saturate(1.8) brightness(0.85)',
-            transition: 'background-image 0.1s ease-in-out',
-          }}
-        />
+      {/* ── B. TWO PERMANENT IMAGE LAYERS FOR ZERO-FLICKER CROSSFADE ── */}
+      {hasFrames && (
+        <>
+          {/* Layer A */}
+          <div
+            className="hero-bg-layer hero-bg-layer-a"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              backgroundImage: `url(${imageA})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              opacity: activeLayer === 'A' ? 0.38 : 0,
+              zIndex: 1,
+              filter: 'saturate(1.8) brightness(0.85)',
+              transition: 'opacity 1.2s ease-in-out',
+              willChange: 'opacity',
+            }}
+          />
+
+          {/* Layer B */}
+          <div
+            className="hero-bg-layer hero-bg-layer-b"
+            style={{
+              position: 'absolute',
+              inset: 0,
+              backgroundImage: `url(${imageB})`,
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+              opacity: activeLayer === 'B' ? 0.38 : 0,
+              zIndex: 2,
+              filter: 'saturate(1.8) brightness(0.85)',
+              transition: 'opacity 1.2s ease-in-out',
+              willChange: 'opacity',
+            }}
+          />
+        </>
       )}
 
-      {/* ── LAYER 2: Dark Overlay gradient (Semi-transparent so paint motion shines through) */}
+      {/* ── Dark Overlay gradient (Semi-transparent so paint motion shines through) ── */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
           background: 'radial-gradient(circle at 50% 35%, rgba(249,115,22,0.1) 0%, rgba(10,10,20,0.55) 60%, rgba(7,7,18,0.82) 100%)',
-          zIndex: 2,
+          zIndex: 3,
           pointerEvents: 'none',
         }}
       />
 
-      {/* ── LAYER 3: Hero Content Container */}
+      {/* ── Hero Content Container ── */}
       <div
         className="container hero-container"
         style={{
@@ -194,3 +257,4 @@ export default function Hero() {
     </section>
   );
 }
+

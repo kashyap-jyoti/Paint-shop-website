@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState, useCallback } from 'react';
+import { useEffect } from 'react';
 import { motion, useScroll, useTransform, useMotionValue, useSpring } from 'framer-motion';
 import { getPaintFrames } from '@utils/imageLoader';
 
@@ -10,11 +10,13 @@ const TOTAL = ALL_FRAMES.length; // 60
  * Provides clear, vibrant background images across every section of the website.
  */
 export default function AnimatedPaintBackground() {
-  const [primaryFrame, setPrimaryFrame] = useState(0);
-  const [secondaryFrame, setSecondaryFrame] = useState(Math.floor(TOTAL / 3));
-  const [tertiaryFrame, setTertiaryFrame] = useState(Math.floor((TOTAL * 2) / 3));
-  const animRef = useRef<number>(0);
-  const lastTime = useRef(0);
+  // Preload frames in browser cache on mount
+  useEffect(() => {
+    ALL_FRAMES.forEach((src) => {
+      const img = new Image();
+      img.src = src;
+    });
+  }, []);
 
   // Mouse tracking
   const mouseX = useMotionValue(0);
@@ -29,24 +31,6 @@ export default function AnimatedPaintBackground() {
   const scrollRotate = useTransform(scrollYProgress, [0, 1], [0, 20]);
   const scrollScale = useTransform(scrollYProgress, [0, 0.5, 1], [1, 1.18, 1.08]);
 
-  // Frame animation loop (~9fps)
-  const animate = useCallback((timestamp: number) => {
-    if (TOTAL === 0) return;
-    const elapsed = timestamp - lastTime.current;
-    if (elapsed > 110) {
-      setPrimaryFrame((f) => (f + 1) % TOTAL);
-      setSecondaryFrame((f) => (f + 2) % TOTAL);
-      setTertiaryFrame((f) => (f + 3) % TOTAL);
-      lastTime.current = timestamp;
-    }
-    animRef.current = requestAnimationFrame(animate);
-  }, []);
-
-  useEffect(() => {
-    animRef.current = requestAnimationFrame(animate);
-    return () => cancelAnimationFrame(animRef.current);
-  }, [animate]);
-
   useEffect(() => {
     const handleMouse = (e: MouseEvent) => {
       mouseX.set(e.clientX - window.innerWidth / 2);
@@ -60,6 +44,10 @@ export default function AnimatedPaintBackground() {
   const scatterIndices = isMobile
     ? [0, 12, 24, 36, 48, 9, 21]
     : [0, 6, 12, 18, 24, 30, 36, 42, 48, 54, 3, 9, 15, 21, 27];
+
+  const primaryFrameSrc = ALL_FRAMES[0] || '';
+  const secondaryFrameSrc = TOTAL > 0 ? ALL_FRAMES[Math.floor(TOTAL / 3)] : primaryFrameSrc;
+  const tertiaryFrameSrc = TOTAL > 0 ? ALL_FRAMES[Math.floor((TOTAL * 2) / 3)] : primaryFrameSrc;
 
   return (
     <div
@@ -77,7 +65,7 @@ export default function AnimatedPaintBackground() {
         style={{
           position: 'absolute',
           inset: 0,
-          backgroundImage: `url(${ALL_FRAMES[primaryFrame]})`,
+          backgroundImage: `url(${primaryFrameSrc})`,
           backgroundSize: 'cover',
           backgroundPosition: 'center',
           backgroundRepeat: 'no-repeat',
@@ -95,7 +83,7 @@ export default function AnimatedPaintBackground() {
           right: '-5%',
           width: '60%',
           height: '75%',
-          backgroundImage: `url(${ALL_FRAMES[secondaryFrame]})`,
+          backgroundImage: `url(${secondaryFrameSrc})`,
           backgroundSize: 'contain',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
@@ -123,7 +111,7 @@ export default function AnimatedPaintBackground() {
           left: '-10%',
           width: '65%',
           height: '70%',
-          backgroundImage: `url(${ALL_FRAMES[tertiaryFrame]})`,
+          backgroundImage: `url(${tertiaryFrameSrc})`,
           backgroundSize: 'contain',
           backgroundRepeat: 'no-repeat',
           backgroundPosition: 'center',
@@ -165,7 +153,7 @@ export default function AnimatedPaintBackground() {
         const pos = positions[i % positions.length];
         const size = 60 + (i % 5) * 20;
         const duration = 5 + (i % 6) * 1.5;
-        const animatedFrameIdx = (frameIdx + primaryFrame) % TOTAL;
+        const frameSrc = TOTAL > 0 ? ALL_FRAMES[frameIdx % TOTAL] : primaryFrameSrc;
 
         return (
           <motion.div
@@ -175,7 +163,7 @@ export default function AnimatedPaintBackground() {
               ...pos,
               width: `${size}px`,
               height: `${size}px`,
-              backgroundImage: `url(${ALL_FRAMES[animatedFrameIdx]})`,
+              backgroundImage: `url(${frameSrc})`,
               backgroundSize: 'cover',
               backgroundPosition: 'center',
               borderRadius: '50%',
@@ -187,7 +175,7 @@ export default function AnimatedPaintBackground() {
             animate={{
               y: [0, -(15 + (i % 4) * 6), 0],
               scale: [1, 1.15, 1],
-              rotate: [0, (i % 2 === 0 ? 12 : -12), 0],
+              rotate: [0, i % 2 === 0 ? 12 : -12, 0],
             }}
             transition={{
               duration,
@@ -201,3 +189,4 @@ export default function AnimatedPaintBackground() {
     </div>
   );
 }
+
