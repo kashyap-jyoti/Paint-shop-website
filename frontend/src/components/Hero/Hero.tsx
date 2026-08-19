@@ -5,69 +5,68 @@ import { BUSINESS_INFO } from '@utils/constants';
 import { getPaintFrames } from '@utils/imageLoader';
 
 // Centralized array of existing uploaded hero image paths
-const FRAMES = getPaintFrames();
+const FRAMES: string[] = getPaintFrames();
 
-// Global set to ensure image URLs are preloaded into browser memory cache
+// Global preloaded cache to ensure background preloading doesn't duplicate
 const preloadedCache = new Set<string>();
 
-function preloadHeroImages(images: string[]) {
+/**
+ * Preloads image paths in the background without blocking execution or rendering.
+ * Ignores any broken image errors gracefully to ensure animation never halts.
+ */
+function preloadImages(images: string[]) {
   images.forEach((src) => {
-    if (!preloadedCache.has(src)) {
+    if (src && !preloadedCache.has(src)) {
+      preloadedCache.add(src);
       const img = new Image();
       img.src = src;
-      preloadedCache.add(src);
     }
   });
 }
 
 export default function Hero() {
-  // Two persistent layers for continuous ping-pong crossfade
-  const [frameAIndex, setFrameAIndex] = useState(0);
-  const [frameBIndex, setFrameBIndex] = useState(1 % (FRAMES.length || 1));
-  const [activeLayer, setActiveLayer] = useState<'A' | 'B'>('A');
+  const totalFrames = FRAMES.length;
+  const initialFrameA = totalFrames > 0 ? FRAMES[0] : '';
+  const initialFrameB = totalFrames > 1 ? FRAMES[1] : initialFrameA;
 
-  const currentIndexRef = useRef(0);
+  // Persistent layers state for zero-flicker crossfade
+  const [activeLayer, setActiveLayer] = useState<'A' | 'B'>('A');
+  const [imageA, setImageA] = useState<string>(initialFrameA);
+  const [imageB, setImageB] = useState<string>(initialFrameB);
+  const [, setCurrentIndex] = useState<number>(0);
+
+  const currentIndexRef = useRef<number>(0);
   const activeLayerRef = useRef<'A' | 'B'>('A');
 
   useEffect(() => {
-    if (FRAMES.length === 0) return;
+    if (totalFrames <= 1) return;
 
-    // A. Preload all uploaded existing hero frame images
-    preloadHeroImages(FRAMES);
+    // Preload remaining images in background (non-blocking)
+    preloadImages(FRAMES);
 
-    // Respect prefers-reduced-motion setting
-    if (typeof window !== 'undefined') {
-      const mediaQuery = window.matchMedia('(prefers-reduced-motion: reduce)');
-      if (mediaQuery.matches) return;
-    }
-
-    // C. Single animation timer for crossfading hero background images
-    const interval = setInterval(() => {
-      const totalFrames = FRAMES.length;
-      if (totalFrames <= 1) return;
-
+    // Single animation timer for cycling hero background images
+    const timer = setInterval(() => {
       const nextIndex = (currentIndexRef.current + 1) % totalFrames;
       currentIndexRef.current = nextIndex;
+      setCurrentIndex(nextIndex);
 
       if (activeLayerRef.current === 'A') {
-        // Update Layer B (currently opacity: 0) to next image, then fade it in
-        setFrameBIndex(nextIndex);
+        // Load next image into Layer B, then bring Layer B to front and fade in
+        setImageB(FRAMES[nextIndex] || '');
         setActiveLayer('B');
         activeLayerRef.current = 'B';
       } else {
-        // Update Layer A (currently opacity: 0) to next image, then fade it in
-        setFrameAIndex(nextIndex);
+        // Load next image into Layer A, then bring Layer A to front and fade in
+        setImageA(FRAMES[nextIndex] || '');
         setActiveLayer('A');
         activeLayerRef.current = 'A';
       }
-    }, 3000);
+    }, 3500);
 
-    return () => clearInterval(interval);
-  }, []);
+    return () => clearInterval(timer);
+  }, [totalFrames]);
 
-  const hasFrames = FRAMES.length > 0;
-  const imageA = hasFrames ? FRAMES[frameAIndex] : '';
-  const imageB = hasFrames ? FRAMES[frameBIndex] : '';
+  const hasFrames = totalFrames > 0;
 
   return (
     <section
@@ -79,40 +78,44 @@ export default function Hero() {
         display: 'flex',
         alignItems: 'center',
         overflow: 'hidden',
-        background: 'linear-gradient(135deg, rgba(7,7,18,0.55) 0%, rgba(18,16,46,0.65) 45%, rgba(11,15,32,0.7) 100%)',
+        background: 'linear-gradient(135deg, rgba(7,7,18,0.7) 0%, rgba(18,16,46,0.75) 45%, rgba(11,15,32,0.8) 100%)',
       }}
     >
-      {/* ── B. TWO PERMANENT IMAGE LAYERS FOR ZERO-FLICKER CROSSFADE ── */}
+      {/* ── TWO PERMANENTLY MOUNTED IMAGE LAYERS FOR ZERO-FLICKER CROSSFADE ── */}
       {hasFrames && (
         <>
-          {/* Layer A */}
+          {/* Background Layer A */}
           <div
             className="hero-bg-layer hero-bg-layer-a"
             style={{
               position: 'absolute',
               inset: 0,
-              backgroundImage: `url(${imageA})`,
+              width: '100%',
+              height: '100%',
+              backgroundImage: imageA ? `url("${imageA}")` : 'none',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              opacity: activeLayer === 'A' ? 0.38 : 0,
-              zIndex: 1,
+              opacity: activeLayer === 'A' ? 0.75 : 0,
+              zIndex: activeLayer === 'A' ? 2 : 1,
               filter: 'saturate(1.8) brightness(0.85)',
               transition: 'opacity 1.2s ease-in-out',
               willChange: 'opacity',
             }}
           />
 
-          {/* Layer B */}
+          {/* Background Layer B */}
           <div
             className="hero-bg-layer hero-bg-layer-b"
             style={{
               position: 'absolute',
               inset: 0,
-              backgroundImage: `url(${imageB})`,
+              width: '100%',
+              height: '100%',
+              backgroundImage: imageB ? `url("${imageB}")` : 'none',
               backgroundSize: 'cover',
               backgroundPosition: 'center',
-              opacity: activeLayer === 'B' ? 0.38 : 0,
-              zIndex: 2,
+              opacity: activeLayer === 'B' ? 0.75 : 0,
+              zIndex: activeLayer === 'B' ? 2 : 1,
               filter: 'saturate(1.8) brightness(0.85)',
               transition: 'opacity 1.2s ease-in-out',
               willChange: 'opacity',
@@ -121,18 +124,18 @@ export default function Hero() {
         </>
       )}
 
-      {/* ── Dark Overlay gradient (Semi-transparent so paint motion shines through) ── */}
+      {/* ── Dark Radial Overlay (zIndex: 3) ── */}
       <div
         style={{
           position: 'absolute',
           inset: 0,
-          background: 'radial-gradient(circle at 50% 35%, rgba(249,115,22,0.1) 0%, rgba(10,10,20,0.55) 60%, rgba(7,7,18,0.82) 100%)',
+          background: 'radial-gradient(circle at 50% 35%, rgba(249,115,22,0.12) 0%, rgba(10,10,20,0.65) 60%, rgba(7,7,18,0.88) 100%)',
           zIndex: 3,
           pointerEvents: 'none',
         }}
       />
 
-      {/* ── Hero Content Container ── */}
+      {/* ── Hero Content Container (zIndex: 10) ── */}
       <div
         className="container hero-container"
         style={{
@@ -142,7 +145,7 @@ export default function Hero() {
         }}
       >
         <div className="hero-content-wrapper">
-          {/* 1. Trust Badge — 0.1s staggered entry */}
+          {/* Trust Badge */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -169,7 +172,7 @@ export default function Hero() {
             <span>Trusted Store • 10+ Years • Ghazipur</span>
           </motion.div>
 
-          {/* 2. Main Heading — 0.25s staggered entry */}
+          {/* Main Heading */}
           <motion.h1
             initial={{ opacity: 0, y: 24 }}
             animate={{ opacity: 1, y: 0 }}
@@ -201,7 +204,7 @@ export default function Hero() {
             <span className="hero-heading-line">in Ghazipur</span>
           </motion.h1>
 
-          {/* 3. Description — 0.4s staggered entry */}
+          {/* Description */}
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
@@ -216,7 +219,7 @@ export default function Hero() {
             Ghazipur's trusted paint and hardware store in Rauza. Premium interior &amp; exterior paints, Berger Paints, wall putty, polishes, automated colour mixing, and hardware supplies.
           </motion.p>
 
-          {/* 4. CTA Buttons — 0.55s staggered entry */}
+          {/* CTA Buttons */}
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
