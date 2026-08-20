@@ -26,47 +26,29 @@ function preloadImages(images: string[]) {
 
 export default function Hero() {
   const totalFrames = FRAMES.length;
-  const initialFrameA = totalFrames > 0 ? FRAMES[0] : '';
-  const initialFrameB = totalFrames > 1 ? FRAMES[1] : initialFrameA;
 
-  // Persistent layers state for zero-flicker crossfade
-  const [activeLayer, setActiveLayer] = useState<'A' | 'B'>('A');
-  const [imageA, setImageA] = useState<string>(initialFrameA);
-  const [imageB, setImageB] = useState<string>(initialFrameB);
-  const [, setCurrentIndex] = useState<number>(0);
-
-  const currentIndexRef = useRef<number>(0);
-  const activeLayerRef = useRef<'A' | 'B'>('A');
+  // Initialize with the first image immediately so frame 0 appears on mount
+  const [currentFrameIndex, setCurrentFrameIndex] = useState<number>(0);
+  const frameIndexRef = useRef<number>(0);
 
   useEffect(() => {
     if (totalFrames <= 1) return;
 
-    // Preload remaining images in background (non-blocking)
+    // 1. Preload all animation frames upfront into browser cache
     preloadImages(FRAMES);
 
-    // Single animation timer for cycling hero background images
+    // 2. Single animation timer cycling frames smoothly (~140ms per frame matching delay-0.17s)
     const timer = setInterval(() => {
-      const nextIndex = (currentIndexRef.current + 1) % totalFrames;
-      currentIndexRef.current = nextIndex;
-      setCurrentIndex(nextIndex);
+      const nextIndex = (frameIndexRef.current + 1) % totalFrames;
+      frameIndexRef.current = nextIndex;
+      setCurrentFrameIndex(nextIndex);
+    }, 140);
 
-      if (activeLayerRef.current === 'A') {
-        // Load next image into Layer B, then bring Layer B to front and fade in
-        setImageB(FRAMES[nextIndex] || '');
-        setActiveLayer('B');
-        activeLayerRef.current = 'B';
-      } else {
-        // Load next image into Layer A, then bring Layer A to front and fade in
-        setImageA(FRAMES[nextIndex] || '');
-        setActiveLayer('A');
-        activeLayerRef.current = 'A';
-      }
-    }, 3500);
-
+    // 3. Cleanup timer on unmount
     return () => clearInterval(timer);
   }, [totalFrames]);
 
-  const hasFrames = totalFrames > 0;
+  const currentFrameSrc = totalFrames > 0 ? FRAMES[currentFrameIndex] : '';
 
   return (
     <section
@@ -81,47 +63,25 @@ export default function Hero() {
         background: 'linear-gradient(135deg, rgba(7,7,18,0.7) 0%, rgba(18,16,46,0.75) 45%, rgba(11,15,32,0.8) 100%)',
       }}
     >
-      {/* ── TWO PERMANENTLY MOUNTED IMAGE LAYERS FOR ZERO-FLICKER CROSSFADE ── */}
-      {hasFrames && (
-        <>
-          {/* Background Layer A */}
-          <div
-            className="hero-bg-layer hero-bg-layer-a"
-            style={{
-              position: 'absolute',
-              inset: 0,
-              width: '100%',
-              height: '100%',
-              backgroundImage: imageA ? `url("${imageA}")` : 'none',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              opacity: activeLayer === 'A' ? 0.75 : 0,
-              zIndex: activeLayer === 'A' ? 2 : 1,
-              filter: 'saturate(1.8) brightness(0.85)',
-              transition: 'opacity 1.2s ease-in-out',
-              willChange: 'opacity',
-            }}
-          />
-
-          {/* Background Layer B */}
-          <div
-            className="hero-bg-layer hero-bg-layer-b"
-            style={{
-              position: 'absolute',
-              inset: 0,
-              width: '100%',
-              height: '100%',
-              backgroundImage: imageB ? `url("${imageB}")` : 'none',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              opacity: activeLayer === 'B' ? 0.75 : 0,
-              zIndex: activeLayer === 'B' ? 2 : 1,
-              filter: 'saturate(1.8) brightness(0.85)',
-              transition: 'opacity 1.2s ease-in-out',
-              willChange: 'opacity',
-            }}
-          />
-        </>
+      {/* ── SMOOTH FRAME-BY-FRAME PAINT BACKGROUND ANIMATION LAYER ── */}
+      {totalFrames > 0 && (
+        <div
+          className="hero-bg-frame"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            backgroundImage: currentFrameSrc ? `url("${currentFrameSrc}")` : 'none',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            opacity: 0.45,
+            zIndex: 1,
+            filter: 'saturate(1.8) brightness(0.85)',
+            pointerEvents: 'none',
+            willChange: 'background-image',
+          }}
+        />
       )}
 
       {/* ── Dark Radial Overlay (zIndex: 3) ── */}
