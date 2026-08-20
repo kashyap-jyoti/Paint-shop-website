@@ -1,103 +1,54 @@
-import { useEffect, useRef, useState, useMemo } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { BUSINESS_INFO } from '@utils/constants';
 import { getPaintFrames } from '@utils/imageLoader';
 
-// Centralized array of existing uploaded hero image paths
+// Centralized array of existing uploaded hero image paths (60 frames)
 const GLOBAL_FRAMES: string[] = getPaintFrames();
 
-// Global set to track preloaded image URLs across component mounts
+// Global cache to prevent redundant image preloads across remounts
 const preloadedCache = new Set<string>();
 
 /**
- * Preloads all animation image sources before starting transitions.
- * Guarantees all frames are cached in browser memory before crossfading.
+ * Preloads image sources asynchronously in the background.
+ * Non-blocking: failures or slow loads do not delay the animation timer.
  */
-function preloadAllImages(sources: string[]): Promise<void> {
-  if (!sources || sources.length === 0) return Promise.resolve();
-
-  const promises = sources.map((src) => {
-    return new Promise<void>((resolve) => {
-      if (!src || preloadedCache.has(src)) {
-        resolve();
-        return;
-      }
+function preloadAllImagesBackground(sources: string[]) {
+  sources.forEach((src) => {
+    if (src && !preloadedCache.has(src)) {
+      preloadedCache.add(src);
       const img = new Image();
-      img.onload = () => {
-        preloadedCache.add(src);
-        resolve();
-      };
-      img.onerror = () => {
-        // Resolve gracefully on error so single broken image doesn't halt loop
-        preloadedCache.add(src);
-        resolve();
-      };
       img.src = src;
-    });
+    }
   });
-
-  return Promise.all(promises).then(() => undefined);
 }
 
 export default function Hero() {
-  // Stable reference to hero frames
-  const frames = useMemo(() => GLOBAL_FRAMES, []);
-  const totalFrames = frames.length;
+  const totalFrames = GLOBAL_FRAMES.length;
 
-  const initialFrameA = totalFrames > 0 ? frames[0] : '';
-  const initialFrameB = totalFrames > 1 ? frames[1] : initialFrameA;
-
-  // Double-buffered layers for smooth zero-flicker opacity crossfade
-  const [imageA, setImageA] = useState<string>(initialFrameA);
-  const [imageB, setImageB] = useState<string>(initialFrameB);
-  const [activeLayer, setActiveLayer] = useState<'A' | 'B'>('A');
-
-  const currentIndexRef = useRef<number>(0);
-  const activeLayerRef = useRef<'A' | 'B'>('A');
+  // Initialize frame 0 immediately on mount
+  const [currentFrameIndex, setCurrentFrameIndex] = useState<number>(0);
+  const frameIndexRef = useRef<number>(0);
 
   useEffect(() => {
     if (totalFrames <= 1) return;
 
-    let isMounted = true;
-    let timer: ReturnType<typeof setInterval> | null = null;
+    // 1. Kick off background preloading (non-blocking)
+    preloadAllImagesBackground(GLOBAL_FRAMES);
 
-    // 1. Preload all animation frames into browser memory cache first
-    preloadAllImages(frames).then(() => {
-      if (!isMounted) return;
+    // 2. Start ONE single timer immediately for continuous frame cycling (~130ms per frame)
+    const timer = setInterval(() => {
+      const nextIndex = (frameIndexRef.current + 1) % totalFrames;
+      frameIndexRef.current = nextIndex;
+      setCurrentFrameIndex(nextIndex);
+    }, 130);
 
-      // 2. Start ONE controlled timer for cycling frames with smooth opacity crossfade
-      timer = setInterval(() => {
-        const nextIndex = (currentIndexRef.current + 1) % totalFrames;
-        currentIndexRef.current = nextIndex;
-        const nextImage = frames[nextIndex] || '';
+    // 3. Synchronously return cleanup function to clear timer on unmount
+    return () => clearInterval(timer);
+  }, [totalFrames]);
 
-        if (activeLayerRef.current === 'A') {
-          // Prepare hidden Layer B with next preloaded image, then fade Layer B in
-          setImageB(nextImage);
-          requestAnimationFrame(() => {
-            if (!isMounted) return;
-            setActiveLayer('B');
-            activeLayerRef.current = 'B';
-          });
-        } else {
-          // Prepare hidden Layer A with next preloaded image, then fade Layer A in
-          setImageA(nextImage);
-          requestAnimationFrame(() => {
-            if (!isMounted) return;
-            setActiveLayer('A');
-            activeLayerRef.current = 'A';
-          });
-        }
-      }, 3000);
-    });
-
-    // 3. Clean up timer & mount flag on unmount to prevent memory leaks or duplicate intervals
-    return () => {
-      isMounted = false;
-      if (timer) clearInterval(timer);
-    };
-  }, [frames, totalFrames]);
+  const currentFrameSrc = totalFrames > 0 ? GLOBAL_FRAMES[currentFrameIndex] : '';
 
   return (
     <section
@@ -112,49 +63,27 @@ export default function Hero() {
         background: 'linear-gradient(135deg, rgba(7,7,18,0.7) 0%, rgba(18,16,46,0.75) 45%, rgba(11,15,32,0.8) 100%)',
       }}
     >
-      {/* ── DOUBLE-BUFFERED IMAGE LAYERS FOR ULTRA-SMOOTH OPACITY TRANSITION ── */}
+      {/* ── CONTINUOUS FLUID PAINT BACKGROUND ANIMATION LAYER ── */}
       {totalFrames > 0 && (
-        <>
-          {/* Background Layer A */}
-          <div
-            className="hero-bg-layer hero-bg-layer-a"
-            style={{
-              position: 'absolute',
-              inset: 0,
-              width: '100%',
-              height: '100%',
-              backgroundImage: imageA ? `url("${imageA}")` : 'none',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              opacity: activeLayer === 'A' ? 0.55 : 0,
-              zIndex: activeLayer === 'A' ? 2 : 1,
-              transition: 'opacity 1s ease-in-out',
-              willChange: 'opacity',
-              pointerEvents: 'none',
-            }}
-          />
-
-          {/* Background Layer B */}
-          <div
-            className="hero-bg-layer hero-bg-layer-b"
-            style={{
-              position: 'absolute',
-              inset: 0,
-              width: '100%',
-              height: '100%',
-              backgroundImage: imageB ? `url("${imageB}")` : 'none',
-              backgroundSize: 'cover',
-              backgroundPosition: 'center',
-              backgroundRepeat: 'no-repeat',
-              opacity: activeLayer === 'B' ? 0.55 : 0,
-              zIndex: activeLayer === 'B' ? 2 : 1,
-              transition: 'opacity 1s ease-in-out',
-              willChange: 'opacity',
-              pointerEvents: 'none',
-            }}
-          />
-        </>
+        <div
+          className="hero-bg-frame"
+          style={{
+            position: 'absolute',
+            inset: 0,
+            width: '100%',
+            height: '100%',
+            backgroundImage: currentFrameSrc ? `url("${currentFrameSrc}")` : 'none',
+            backgroundSize: 'cover',
+            backgroundPosition: 'center',
+            backgroundRepeat: 'no-repeat',
+            opacity: 0.45,
+            zIndex: 1,
+            filter: 'saturate(1.8) brightness(0.85)',
+            transition: 'background-image 0.1s ease-in-out',
+            pointerEvents: 'none',
+            willChange: 'background-image',
+          }}
+        />
       )}
 
       {/* ── Dark Radial Overlay (zIndex: 3) ── */}
@@ -293,4 +222,3 @@ export default function Hero() {
     </section>
   );
 }
-
