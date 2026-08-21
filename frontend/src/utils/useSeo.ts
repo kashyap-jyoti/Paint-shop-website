@@ -30,6 +30,10 @@ export function useSeo({ title, description, canonicalPath = '' }: SeoProps) {
     if (ogDesc) {
       ogDesc.setAttribute('content', description);
     }
+    let ogSiteName = document.querySelector('meta[property="og:site_name"]');
+    if (ogSiteName) {
+      ogSiteName.setAttribute('content', 'Satyam Hardware & Paint');
+    }
 
     // Twitter Title & Description
     let twTitle = document.querySelector('meta[name="twitter:title"]');

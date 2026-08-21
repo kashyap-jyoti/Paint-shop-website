@@ -14,7 +14,7 @@ import { useSeo } from '@utils/useSeo';
 export default function Home() {
   useSeo({
     title: 'Satyam Hardware & Paint | Paint & Hardware Shop in Ghazipur',
-    description: 'Satyam Hardware & Paint in Rauza, Ghazipur offers interior and exterior paints, Berger Paints, wall putty, polishes, colour mixing and hardware products.',
+    description: 'Satyam Hardware & Paint, Rauza, Ghazipur offers interior & exterior paints, hardware, construction materials, colour consultation, Berger Paints, wall putty, and polishes.',
     canonicalPath: '/',
   });
 
